@@ -1,5 +1,5 @@
 
-# Expense Trackering
+# Expense Tracker
 
 **Basit JavaScript Expense Tracker Uygulaması**
 
