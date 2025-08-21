@@ -12,27 +12,20 @@ function addExpense() {
   const category = categoryInput.value.trim();
   const description = descriptionInput.value.trim();
 
-  // Geçerli girişler yapıldığından emin olalım
   if (isNaN(amount) || amount <= 0) {
     alert("Lütfen geçerli bir harcama miktarı girin!");
     return;
   }
-
   if (category === "") {
     alert("Lütfen bir kategori seçin!");
     return;
   }
-
   if (description === "") {
     alert("Açıklama boş bırakılamaz!");
     return;
   }
 
-  const newExpense = {
-    amount: amount,
-    category: category,
-    description: description,
-  };
+  const newExpense = { amount, category, description };
 
   // Harcamayı listeye ekle
   displayExpense(newExpense);
@@ -40,61 +33,71 @@ function addExpense() {
   // Harcamayı localStorage'a kaydet
   saveExpense(newExpense);
 
-  // Inputları sıfırlayalım
+  // Inputları sıfırla
   amountInput.value = "";
   categoryInput.value = "";
   descriptionInput.value = "";
 
   // Toplam harcamayı güncelle
-  updateTotalAmount(amount);
+  updateTotalAmount();
 }
 
-// Harcamayı listede gösterme fonksiyonu
-function displayExpense(expense) {
-  const li = document.createElement("li");
-  li.innerHTML = `${expense.category} - ${expense.amount} TL - ${expense.description} 
-                  <button onclick="deleteExpense(this, ${expense.amount})">Sil</button>`;
-  expenseList.appendChild(li);
-}
-
-// Harcamayı silme fonksiyonu
-function deleteExpense(button, amount) {
-  const li = button.parentElement;
-  expenseList.removeChild(li);
-
-  // Silinen harcamayı toplamdan çıkaralım
-  updateTotalAmount(amount, "subtract");
-}
-
-// Toplam harcama hesaplama fonksiyonu
-function updateTotalAmount(amount = 0, action = "add") {
-  let totalAmount = parseFloat(localStorage.getItem("totalAmount") || "0");
-
-  if (action === "subtract") {
-    totalAmount -= amount;
-  } else {
-    totalAmount += amount;
-  }
-
-  totalAmountDisplay.textContent = totalAmount;
-  localStorage.setItem("totalAmount", totalAmount);
-}
-
-// Harcamaları localStorage'a kaydetme fonksiyonu
+// Harcamayı localStorage'a kaydetme fonksiyonu
 function saveExpense(expense) {
-  const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+  let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
   expenses.push(expense);
   localStorage.setItem("expenses", JSON.stringify(expenses));
 }
 
+// Harcamayı listede gösterme fonksiyonu
+function displayExpense(expense, index) {
+  const li = document.createElement("li");
+  li.innerHTML = `
+    <span class="expense-info">
+      <strong>${expense.category}</strong> - 
+      <span class="amount">${expense.amount} TL</span> - 
+      <span class="description">${expense.description}</span>
+    </span>
+    <button class="delete-btn" onclick="deleteExpense(${index})">Sil</button>
+  `;
+  expenseList.appendChild(li);
+}
+
+// Harcamayı silme fonksiyonu
+function deleteExpense(index) {
+  let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+  expenses.splice(index, 1); // localStorage'tan sil
+  localStorage.setItem("expenses", JSON.stringify(expenses));
+  loadExpenses(); // listeyi yeniden yükle
+  updateTotalAmount();
+}
+
+// Toplam harcama hesaplama fonksiyonu
+function updateTotalAmount() {
+  const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+  const total = expenses.reduce((sum, e) => sum + e.amount, 0);
+  totalAmountDisplay.textContent = total.toFixed(2);
+}
+
 // Harcamaları sayfada göstermek için
 function loadExpenses() {
+  expenseList.innerHTML = ""; // öncekileri temizle
   const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
-  expenses.forEach(displayExpense);
+  expenses.forEach((expense, index) => displayExpense(expense, index));
 }
 
 // Event listener
 addExpenseBtn.addEventListener("click", addExpense);
 
-// Sayfa yüklendiğinde harcamaları yükle
-window.addEventListener("DOMContentLoaded", loadExpenses);
+// Enter tuşu ile harcama ekleme
+descriptionInput.addEventListener("keypress", function(e) {
+  if (e.key === "Enter") {
+    addExpense();
+  }
+});
+
+// Sayfa yüklendiğinde harcamaları yükle ve toplamı göster
+window.addEventListener("DOMContentLoaded", () => {
+  loadExpenses();
+  updateTotalAmount();
+});

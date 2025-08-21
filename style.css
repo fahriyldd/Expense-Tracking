@@ -1,51 +1,239 @@
 /* styles.css */
 
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
-  padding: 0;
-  background-color: #f4f4f4;
+  padding: 20px;
+  background-color: #f8f9fa;
   text-align: center;
 }
 
 h1 {
-  margin-top: 50px;
+  margin-top: 30px;
+  color: #333;
+}
+
+h2 {
+  color: #555;
+  margin-top: 40px;
+}
+
+h3 {
+  margin-top: 30px;
+  color: #666;
 }
 
 .input-container {
-  margin: 20px 0;
+  margin: 30px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-input {
-  padding: 10px;
+input, select {
+  padding: 12px;
   margin: 5px;
-  width: 200px;
+  width: 250px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: #4CAF50;
 }
 
 button {
-  padding: 10px 20px;
+  padding: 12px 24px;
   background-color: #4CAF50;
   color: white;
   border: none;
+  border-radius: 6px;
   cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
 }
 
 button:hover {
   background-color: #45a049;
 }
 
+.delete-btn {
+  background-color: #f44336;
+  padding: 8px 16px;
+  font-size: 14px;
+}
+
+.delete-btn:hover {
+  background-color: #da190b;
+}
+
 ul {
   list-style-type: none;
   padding: 0;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 li {
   background-color: white;
-  margin: 10px;
-  padding: 10px;
-  border: 1px solid #ddd;
+  margin: 15px 0;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-h3 {
-  margin-top: 20px;
+li:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.expense-info {
+  text-align: left;
+  flex-grow: 1;
+}
+
+.expense-info strong {
+  color: #4CAF50;
+  font-size: 18px;
+}
+
+.amount {
+  color: #f44336;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.description {
+  color: #666;
+  font-style: italic;
+}
+
+#totalAmount {
+  color: #f44336;
+  font-weight: bold;
+  font-size: 24px;
+}
+
+/* Responsive tasarım için media query'ler */
+@media (max-width: 768px) {
+  body {
+    padding: 15px;
+  }
+  
+  .input-container {
+    max-width: 100%;
+    margin: 20px 10px;
+  }
+  
+  input, select {
+    width: 100%;
+    max-width: 300px;
+    margin: 5px 0;
+  }
+  
+  button {
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  ul {
+    max-width: 100%;
+    margin: 0 10px;
+  }
+  
+  li {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+    padding: 15px;
+  }
+  
+  .expense-info {
+    text-align: center;
+  }
+  
+  .delete-btn {
+    width: 100%;
+    max-width: 200px;
+  }
+  
+  h1 {
+    font-size: 24px;
+    margin-top: 20px;
+  }
+  
+  h2 {
+    font-size: 20px;
+    margin-top: 30px;
+  }
+  
+  h3 {
+    font-size: 18px;
+    margin-top: 25px;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 10px;
+  }
+  
+  input, select, button {
+    max-width: 100%;
+    font-size: 16px; /* iOS'ta zoom'u önlemek için */
+  }
+  
+  .input-container {
+    gap: 10px;
+    margin: 15px 5px;
+  }
+  
+  li {
+    margin: 10px 0;
+    padding: 12px;
+  }
+  
+  .expense-info strong {
+    font-size: 16px;
+  }
+  
+  .amount {
+    font-size: 14px;
+  }
+  
+  .description {
+    font-size: 14px;
+  }
+  
+  #totalAmount {
+    font-size: 20px;
+  }
+}
+
+/* Tablet için orta boyut ekran */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .input-container {
+    max-width: 600px;
+  }
+  
+  input, select {
+    width: 280px;
+  }
+  
+  ul {
+    max-width: 700px;
+  }
 }
